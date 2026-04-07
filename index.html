@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Windchill Certification Mock Test</title>
+<title>PTC x Plural Mock Exam</title>
 <style>
   :root {
     --ptc-blue: #003865;
@@ -34,29 +34,17 @@
 
   /* ── HEADER ── */
   header {
-    width: 100%;
-    background: rgba(0,0,0,0.3);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 28px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    width: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px; position: sticky; top: 0; z-index: 100;
     border-bottom: 2px solid var(--ptc-orange);
   }
   .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-icon { width: 42px; height: 42px; background: var(--ptc-orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: white; }
+  .header-logo { height: 42px; border-radius: 6px; background: white; padding: 2px; }
   .logo-text { color: white; }
-  .logo-text strong { display: block; font-size: 16px; letter-spacing: 0.5px; }
-  .logo-text span { font-size: 11px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; }
+  .logo-text strong { display: block; font-size: 18px; letter-spacing: 0.5px; }
 
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
+  .header-controls { display: flex; align-items: center; gap: 16px; }
 
   #timer {
     display: flex; align-items: center; gap: 8px;
@@ -77,26 +65,29 @@
   /* ── WELCOME SCREEN ── */
   .welcome-card { background: white; border-radius: 16px; padding: 48px 40px; box-shadow: var(--shadow); text-align: center; margin-top: 20px; }
   .welcome-badge { display: inline-block; background: var(--ptc-blue); color: white; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 20px; }
-  .welcome-card h1 { font-size: 32px; color: var(--ptc-blue); margin-bottom: 10px; }
-  .welcome-card .subtitle { color: var(--text-mid); font-size: 16px; margin-bottom: 32px; }
+  .welcome-card h1 { font-size: 32px; color: var(--ptc-blue); margin-bottom: 32px; }
+
+  .test-config { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 36px; background: var(--ptc-light); padding: 24px; border-radius: 12px; border: 1px solid var(--ptc-mid); }
+  .test-config label { font-size: 16px; font-weight: 700; color: var(--ptc-blue); }
+  #q-count-selector { width: 100%; max-width: 250px; padding: 12px 16px; font-size: 16px; border-radius: 8px; border: 2px solid var(--ptc-blue); color: var(--ptc-blue); font-weight: 700; outline: none; cursor: pointer; }
 
   .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px; }
-  .info-card { background: var(--ptc-light); border-radius: var(--radius); padding: 20px 14px; border: 1px solid var(--ptc-mid); }
+  .info-card { background: white; border-radius: var(--radius); padding: 20px 14px; border: 1px solid var(--ptc-mid); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .info-card .icon { font-size: 28px; margin-bottom: 8px; }
   .info-card .label { font-size: 12px; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
   .info-card .value { font-size: 22px; font-weight: 800; color: var(--ptc-blue); }
 
-  .test-selector-wrap { margin-bottom: 30px; }
-  #test-selector { width: 100%; max-width: 300px; padding: 12px 16px; font-size: 16px; border-radius: 8px; border: 2px solid var(--ptc-mid); color: var(--ptc-blue); font-weight: 600; outline: none; }
+  .domain-brief { text-align: left; background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 36px; }
+  .domain-brief h3 { color: var(--ptc-blue); font-size: 18px; margin-bottom: 12px; border-bottom: 2px solid var(--ptc-mid); padding-bottom: 8px; }
+  .domain-brief ul { padding-left: 20px; color: var(--text-mid); font-size: 14px; line-height: 1.6; }
+  .domain-brief li { margin-bottom: 8px; }
 
   /* ── BUTTONS ── */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 32px; border-radius: 30px; border: none; cursor: pointer; font-size: 16px; font-weight: 700; transition: all 0.2s; text-decoration: none; }
-  .btn-primary { background: var(--ptc-orange); color: white; box-shadow: 0 4px 14px rgba(232,119,34,0.4); }
+  .btn-primary { background: var(--ptc-orange); color: white; box-shadow: 0 4px 14px rgba(232,119,34,0.4); width: 100%; max-width: 300px; }
   .btn-primary:hover { background: #D4690E; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,119,34,0.5); }
   .btn-secondary { background: white; color: var(--ptc-blue); border: 2px solid var(--border); }
   .btn-secondary:hover { border-color: var(--ptc-blue); background: var(--ptc-light); }
-  .btn-danger { background: var(--danger); color: white; }
-  .btn-danger:hover { background: #A93226; }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
   
   .btn-header-submit { padding: 8px 20px; font-size: 14px; background: var(--danger); color: white; border-radius: 20px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(192,57,43,0.4); transition: 0.2s; }
@@ -111,6 +102,7 @@
   .q-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
   .q-num-badge { background: var(--ptc-blue); color: white; font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
   .topic-badge { background: var(--ptc-light); color: var(--ptc-blue); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--ptc-mid); }
+  .diff-badge { background: #F1F5F9; color: var(--text-mid); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); text-transform: capitalize; }
   .flagged-badge { background: #FFF3CD; color: #856404; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #FFDA6A; }
 
   .question-text { font-size: 18px; font-weight: 600; color: var(--text-dark); line-height: 1.6; margin-bottom: 28px; }
@@ -120,7 +112,6 @@
   .option-btn:hover { border-color: var(--ptc-blue); background: var(--ptc-light); }
   .option-letter { min-width: 28px; height: 28px; border-radius: 50%; background: var(--ptc-light); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 1px; transition: all 0.18s; color: var(--text-mid); }
 
-  /* Only highlight blue when selected during test */
   .option-btn.selected { border-color: var(--ptc-blue); background: #EBF0F8; }
   .option-btn.selected .option-letter { background: var(--ptc-blue); border-color: var(--ptc-blue); color: white; }
 
@@ -142,7 +133,7 @@
   /* ── NAVIGATOR PANEL ── */
   .nav-panel { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
   .nav-panel h3 { font-size: 14px; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; font-weight: 700; }
-  .nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; }
+  .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px; }
   .nav-dot { width: 30px; height: 30px; border-radius: 6px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 11px; font-weight: 700; color: var(--text-mid); transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
   .nav-dot:hover { border-color: var(--ptc-blue); background: var(--ptc-light); }
   .nav-dot.active { border-color: var(--ptc-blue); background: var(--ptc-blue); color: white; }
@@ -163,7 +154,6 @@
   .results-card h2 { font-size: 28px; color: var(--ptc-blue); margin-bottom: 6px; }
   .results-card .result-subtitle { color: var(--text-mid); margin-bottom: 32px; }
 
-  /* Analytical Dashboard */
   .analytics-dashboard { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; margin-bottom: 36px; }
   .score-ring-wrap { text-align: center; background: var(--ptc-light); border-radius: 16px; padding: 24px; border: 1px solid var(--ptc-mid); }
   .score-ring { width: 160px; height: 160px; margin: 0 auto 16px; position: relative; }
@@ -192,7 +182,6 @@
   .stat-box.correct .s-val { color: var(--success); }
   .stat-box.wrong .s-val { color: var(--danger); }
 
-  /* topic breakdown */
   .breakdown-title { font-size: 16px; font-weight: 700; color: var(--ptc-blue); margin-bottom: 14px; }
   .topic-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ptc-light); font-size: 14px; }
   .topic-row .t-name { flex: 1; color: var(--text-dark); }
@@ -200,7 +189,6 @@
   .t-bar-wrap { width: 120px; background: var(--ptc-light); border-radius: 4px; height: 8px; overflow: hidden; }
   .t-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
-  /* review section */
   .review-section { margin-top: 36px; }
   .review-title { font-size: 16px; font-weight: 700; color: var(--ptc-blue); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--ptc-mid); }
   .review-item { border: 1.5px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
@@ -221,12 +209,10 @@
 
   .results-actions { display: flex; gap: 14px; margin-top: 32px; justify-content: center; flex-wrap: wrap; }
 
-  /* responsive */
   @media (max-width: 768px) {
     .analytics-dashboard { grid-template-columns: 1fr; }
     .info-grid { grid-template-columns: 1fr 1fr; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
-    .nav-grid { grid-template-columns: repeat(8, 1fr); }
     header { flex-direction: column; gap: 14px; padding: 14px; }
     #timer { font-size: 16px; padding: 6px 14px; }
     .t-bar-wrap { display: none; }
@@ -237,34 +223,33 @@
 
 <header>
   <div class="logo">
-    <div class="logo-icon">W</div>
+    <img src="ptc_logo.png" alt="PTC Logo" class="header-logo" onerror="this.style.display='none'">
+    <img src="plural_logo.jpg" alt="Plural Logo" class="header-logo" onerror="this.style.display='none'">
     <div class="logo-text">
-      <strong>Windchill Certification</strong>
-      <span>Implementation Practitioner</span>
+      <strong>PTC x Plural Mock Exam</strong>
     </div>
   </div>
   <div class="header-controls" id="header-controls" style="display:none">
     <div id="progress-header">
-      <span class="q-counter" id="header-q-counter">Q 1/100</span>
+      <span class="q-counter" id="header-q-counter">Q 1/25</span>
     </div>
-    <div id="timer">⏱ <span id="timer-display">100:00</span></div>
+    <div id="timer">⏱ <span id="timer-display">00:00</span></div>
     <button class="btn-header-submit" id="btn-global-submit">Submit Exam</button>
   </div>
 </header>
 
 <div class="screen active" id="screen-welcome">
   <div class="welcome-card">
-    <div class="welcome-badge">PTC Windchill Certification Prep</div>
-    <h1>Implementation Practitioner Mock Exam</h1>
-    <p class="subtitle">Complete Testing Environment</p>
-
-    <div class="test-selector-wrap">
-      <select id="test-selector">
-        <option value="windchill_mock_test_1.json">Mock Test 1 (Advanced & Tech Essentials)</option>
-        <option value="windchill_mock_test_2.json">Mock Test 2</option>
-        <option value="windchill_mock_test_3.json">Mock Test 3</option>
-        <option value="windchill_mock_test_4.json">Mock Test 4</option>
-        <option value="windchill_mock_test_5.json">Mock Test 5</option>
+    <div class="welcome-badge">Implementation Practitioner</div>
+    <h1>Windchill Certification Mock Exam</h1>
+    
+    <div class="test-config">
+      <label for="q-count-selector">Select Number of Questions:</label>
+      <select id="q-count-selector">
+        <option value="25">25 Questions</option>
+        <option value="50">50 Questions</option>
+        <option value="75">75 Questions</option>
+        <option value="100">100 Questions</option>
       </select>
     </div>
 
@@ -272,33 +257,36 @@
       <div class="info-card">
         <div class="icon">📋</div>
         <div class="label">Questions</div>
-        <div class="value">100</div>
+        <div class="value" id="ui-q-count">25</div>
       </div>
       <div class="info-card">
         <div class="icon">⏱</div>
         <div class="label">Time Limit</div>
-        <div class="value">100 min</div>
+        <div class="value" id="ui-t-limit">15 min</div>
       </div>
       <div class="info-card">
         <div class="icon">🎯</div>
         <div class="label">Pass Score</div>
-        <div class="value">70%</div>
+        <div class="value">80%</div>
       </div>
     </div>
 
-    <div style="background:var(--ptc-light);border-radius:var(--radius);padding:14px 18px;margin-bottom:28px;text-align:left;border:1px solid var(--ptc-mid);">
-      <strong style="color:var(--ptc-blue);">📌 Instructions:</strong>
-      <ul style="margin-top:8px;padding-left:18px;font-size:14px;color:var(--text-mid);line-height:1.8;">
-        <li>All questions are single-choice.</li>
-        <li>You can click an option to select it, and click it again to unselect it.</li>
-        <li>Answers and explanations will only be revealed at the end of the exam.</li>
-        <li>You may flag questions and return to them later.</li>
-        <li>You can submit the exam at any time using the button in the top right.</li>
+    <div class="domain-brief">
+      <h3>Major Topics Covered</h3>
+      <ul>
+        <li>Describe product lifecycle management (PLM) and how Windchill works as a PLM solution</li>
+        <li>Describe the PLM foundational object model and relationships (parts, CAD, documents, etc.)</li>
+        <li>Identify Windchill capabilities (the use of contexts, libraries, etc.)</li>
+        <li>Create and manage business objects (object initialization rules [OIRs], etc.)</li>
+        <li>Manage object change and release (life cycles, workflows, change notices, etc.)</li>
+        <li>Describe setting up a Windchill system (installation, architecture, etc.)</li>
+        <li>Perform basic administration tasks to the Windchill system (services, properties, utilities, etc.)</li>
+        <li>Use Windchill Navigate in conjunction with Windchill</li>
       </ul>
     </div>
 
     <button class="btn btn-primary" id="btn-start" style="font-size:18px;padding:16px 48px;">
-      🚀 Start Exam
+      🚀 Generate & Start Exam
     </button>
   </div>
 </div>
@@ -339,7 +327,7 @@
           </svg>
           <div class="score-text">
             <div class="score-pct" id="score-pct">0%</div>
-            <div class="score-label" id="score-fraction">0/100</div>
+            <div class="score-label" id="score-fraction">0/0</div>
           </div>
         </div>
         <div class="result-verdict" id="result-verdict"></div>
@@ -398,8 +386,8 @@
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-secondary" id="btn-retake">🔄 Retake Test</button>
-      <button class="btn btn-primary" id="btn-home">🏠 Home</button>
+      <button class="btn btn-secondary" id="btn-retake">🔄 Retake Exam</button>
+      <button class="btn btn-primary" id="btn-home">🏠 Home Settings</button>
     </div>
   </div>
 </div>
@@ -411,27 +399,115 @@ let answers = {};
 let flagged = {};
 let currentIdx = 0;
 let timerInterval = null;
-let secondsLeft = 6000; // 100 minutes
+let maxSeconds = 900; 
+let secondsLeft = 900; 
 let startTime = null;
 let timeTaken = 0;
 
+// JSON Files to poll from
+const POOL_FILES = [
+  'windchill_mock_test_1.json',
+  'windchill_mock_test_2.json',
+  'windchill_mock_test_3.json',
+  'windchill_mock_test_4.json',
+  'windchill_mock_test_5.json'
+];
+
+// ── UI UPDATER ─────────────────────────────────────────────────────────────────
+const qSelector = document.getElementById('q-count-selector');
+qSelector.addEventListener('change', (e) => {
+  const v = parseInt(e.target.value);
+  document.getElementById('ui-q-count').textContent = v;
+  if(v === 25) document.getElementById('ui-t-limit').textContent = '15 min';
+  if(v === 50) document.getElementById('ui-t-limit').textContent = '35 min';
+  if(v === 75) document.getElementById('ui-t-limit').textContent = '60 min';
+  if(v === 100) document.getElementById('ui-t-limit').textContent = '75 min';
+});
+
 // ── INIT & FETCH ───────────────────────────────────────────────────────────────
-async function loadTestAndStart(jsonFilename) {
+async function fetchAllQuestions() {
+  let allQs = [];
+  const requests = POOL_FILES.map(file => 
+    fetch(file).then(res => res.ok ? res.json() : []).catch(() => [])
+  );
+  
+  const results = await Promise.all(requests);
+  results.forEach(arr => { allQs = allQs.concat(arr); });
+  return allQs;
+}
+
+function buildExamSubset(pool, targetCount) {
+  let pEasy, pMed, pHard;
+  if(targetCount === 25) { pEasy=0.10; pMed=0.20; pHard=0.70; maxSeconds=15*60; }
+  else if(targetCount === 50) { pEasy=0.20; pMed=0.40; pHard=0.40; maxSeconds=35*60; }
+  else if(targetCount === 75) { pEasy=0.25; pMed=0.45; pHard=0.30; maxSeconds=60*60; }
+  else { pEasy=0.30; pMed=0.35; pHard=0.35; maxSeconds=75*60; }
+
+  let easyNeeded = Math.round(targetCount * pEasy);
+  let medNeeded = Math.round(targetCount * pMed);
+  let hardNeeded = Math.round(targetCount * pHard);
+  hardNeeded += (targetCount - (easyNeeded + medNeeded + hardNeeded)); // Adjust rounding
+
+  let easy = [], med = [], hard = [], unrated = [];
+  
+  // Categorize
+  pool.forEach(q => {
+    let d = q.difficulty ? q.difficulty.toLowerCase() : 'unrated';
+    if(d === 'easy') easy.push(q);
+    else if(d === 'medium') med.push(q);
+    else if(d === 'difficult' || d === 'hard') hard.push(q);
+    else unrated.push(q);
+  });
+
+  const shuffle = arr => arr.sort(() => 0.5 - Math.random());
+  shuffle(easy); shuffle(med); shuffle(hard); shuffle(unrated);
+
+  let finalQs = [];
+  
+  function draw(source, count) {
+    const pulled = source.splice(0, count);
+    finalQs.push(...pulled);
+    return count - pulled.length; // Returns deficit if not enough
+  }
+
+  let eDef = draw(easy, easyNeeded);
+  let mDef = draw(med, medNeeded);
+  let hDef = draw(hard, hardNeeded);
+
+  let totalDeficit = eDef + mDef + hDef;
+  
+  // Fallback routing if JSON lacks difficulty params or doesn't have enough
+  if (totalDeficit > 0) {
+    let uDef = draw(unrated, totalDeficit);
+    if(uDef > 0) {
+      let rDef = draw(easy, uDef);
+      rDef = draw(med, rDef);
+      draw(hard, rDef);
+    }
+  }
+
+  shuffle(finalQs);
+  return finalQs.slice(0, targetCount); // Safety slice
+}
+
+document.getElementById('btn-start').addEventListener('click', async () => {
   const btn = document.getElementById('btn-start');
-  btn.textContent = "Loading Exam...";
+  btn.textContent = "Compiling Exam...";
   btn.disabled = true;
 
   try {
-    const response = await fetch(jsonFilename);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const rawPool = await fetchAllQuestions();
     
-    questions = await response.json();
-    
-    // Shuffle
-    for (let i = questions.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [questions[i], questions[j]] = [questions[j], questions[i]];
+    if (rawPool.length === 0) {
+      throw new Error("No questions found. Ensure JSON files exist on server.");
     }
+
+    const targetCount = parseInt(document.getElementById('q-count-selector').value);
+    
+    // If pool is smaller than target count, just use the pool
+    const actualCount = Math.min(rawPool.length, targetCount); 
+    
+    questions = buildExamSubset(rawPool, actualCount);
     
     answers = {};
     flagged = {};
@@ -445,21 +521,16 @@ async function loadTestAndStart(jsonFilename) {
     startTimer();
 
   } catch (error) {
-    alert("⚠️ Could not load " + jsonFilename + ".\n\nIf running locally (file:///), your browser blocks JSON files for security. Please upload to GitHub Pages.\n\nError: " + error.message);
+    alert("⚠️ Could not load exam.\n\n" + error.message + "\n\nIf running locally (file:///), browser security blocks local JSON loading. Upload to GitHub Pages.");
   } finally {
-    btn.textContent = "🚀 Start Exam";
+    btn.textContent = "🚀 Generate & Start Exam";
     btn.disabled = false;
   }
-}
-
-document.getElementById('btn-start').addEventListener('click', () => {
-  const selectedTest = document.getElementById('test-selector').value;
-  loadTestAndStart(selectedTest);
 });
 
 // ── TIMER ──────────────────────────────────────────────────────────────────────
 function startTimer() {
-  secondsLeft = 6000; // 100 minutes
+  secondsLeft = maxSeconds; 
   startTime = Date.now();
   timerInterval = setInterval(() => {
     secondsLeft--;
@@ -528,6 +599,7 @@ function renderQuestion() {
   const isFlagged = !!flagged[currentIdx];
   const userAns = answers[currentIdx];
   const letters = ['A','B','C','D'];
+  const diffBadge = q.difficulty ? `<span class="diff-badge">${q.difficulty}</span>` : '';
   
   let optionsHTML = q.options.map((opt, i) => {
     let cls = 'option-btn';
@@ -543,6 +615,7 @@ function renderQuestion() {
     <div class="q-meta">
       <span class="q-num-badge">Q ${currentIdx+1} of ${total}</span>
       <span class="topic-badge">${q.topic}</span>
+      ${diffBadge}
       ${isFlagged ? '<span class="flagged-badge">🚩 Flagged</span>' : ''}
     </div>
     <div class="question-text">${q.question}</div>
@@ -560,15 +633,11 @@ function renderQuestion() {
     </div>
   `;
 
-  // Option selection logic (Toggle)
   card.querySelectorAll('.option-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const chosen = parseInt(btn.dataset.idx);
-      if (answers[currentIdx] === chosen) {
-        delete answers[currentIdx]; // Unselect if already selected
-      } else {
-        answers[currentIdx] = chosen; // Select
-      }
+      if (answers[currentIdx] === chosen) delete answers[currentIdx]; 
+      else answers[currentIdx] = chosen; 
       renderQuestion();
     });
   });
@@ -580,18 +649,17 @@ function renderQuestion() {
 
   const prevBtn = document.getElementById('btn-prev');
   if (prevBtn) prevBtn.addEventListener('click', () => { currentIdx--; renderQuestion(); });
-  
   const nextBtn = document.getElementById('btn-next');
   if (nextBtn) nextBtn.addEventListener('click', () => { currentIdx++; renderQuestion(); });
 }
 
-// ── GLOBAL SUBMIT HANDLER ──────────────────────────────────────────────────────
+// ── GLOBAL SUBMIT ──────────────────────────────────────────────────────────────
 document.getElementById('btn-global-submit').addEventListener('click', () => {
   const total = questions.length;
   const answered = Object.keys(answers).length;
   const unanswered = total - answered;
   
-  let msg = `Ready to submit your exam?\n\nYou have answered ${answered} out of ${total} questions.`;
+  let msg = `Ready to submit your exam?\n\nYou answered ${answered} out of ${total} questions.`;
   if (unanswered > 0) msg += `\n⚠️ You have ${unanswered} unanswered questions!`;
   
   if (confirm(msg)) finishExam();
@@ -615,12 +683,11 @@ function finishExam() {
     else { wrong++; }
   });
 
-  const pct = Math.round((correct / total) * 100);
-  const pass = pct >= 70;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const pass = pct >= 80;
 
-  // Ring Animation
   const ringFill = document.getElementById('ring-fill');
-  const circumference = 427.25; // 2 * PI * 68
+  const circumference = 427.25; 
   const offset = circumference - (pct / 100) * circumference;
   ringFill.style.stroke = pass ? '#2D7D46' : '#C0392B';
   setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
@@ -635,7 +702,6 @@ function finishExam() {
   document.getElementById('stat-skipped').textContent = skipped;
   document.getElementById('stat-time').textContent = `${Math.floor(timeTaken/60)}m ${timeTaken%60}s`;
 
-  // Determine Analytics
   let bestTopic = { name: 'N/A', pct: -1 };
   let worstTopic = { name: 'N/A', pct: 101 };
 
@@ -646,7 +712,7 @@ function finishExam() {
     if (tPct > bestTopic.pct) bestTopic = { name: topic, pct: tPct };
     if (tPct < worstTopic.pct) worstTopic = { name: topic, pct: tPct };
 
-    const color = tPct >= 70 ? '#2D7D46' : tPct >= 50 ? '#D4820A' : '#C0392B';
+    const color = tPct >= 80 ? '#2D7D46' : tPct >= 60 ? '#D4820A' : '#C0392B';
     return `<div class="topic-row">
       <span class="t-name">${topic}</span>
       <div class="t-bar-wrap"><div class="t-bar-fill" style="width:${tPct}%;background:${color}"></div></div>
@@ -656,9 +722,8 @@ function finishExam() {
 
   document.getElementById('insight-strongest').textContent = `${bestTopic.name} (${bestTopic.pct}%)`;
   document.getElementById('insight-weakest').textContent = `${worstTopic.name} (${worstTopic.pct}%)`;
-  document.getElementById('insight-action').textContent = `Dedicate your next study session exclusively to ${worstTopic.name}. Review the course manual sections covering this topic before your next attempt.`;
+  document.getElementById('insight-action').textContent = `Review course material regarding ${worstTopic.name} before attempting the exam again.`;
 
-  // Render Review List
   const reviewEl = document.getElementById('review-list');
   const letters = ['A','B','C','D'];
   reviewEl.innerHTML = questions.map((q, i) => {
@@ -698,12 +763,11 @@ function toggleReview(idx) {
 
 // ── NAVIGATION ─────────────────────────────────────────────────────────────────
 document.getElementById('btn-home').addEventListener('click', () => {
+  document.getElementById('header-controls').style.display = 'none';
   showScreen('screen-welcome');
 });
-
 document.getElementById('btn-retake').addEventListener('click', () => {
-  const selectedTest = document.getElementById('test-selector').value;
-  loadTestAndStart(selectedTest);
+  document.getElementById('btn-start').click(); // Re-trigger compile and start
 });
 </script>
 </body>
