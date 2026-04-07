@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PTC x Plural Mock Exam</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
 <style>
   :root {
     --ptc-blue: #003865;
@@ -190,20 +194,8 @@
   .t-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
   /* ── DIFFICULTY BREAKDOWN ── */
-  .diff-breakdown-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 30px;
-  }
-  .diff-card {
-    border-radius: 12px;
-    padding: 18px 20px;
-    border: 2px solid;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+  .diff-breakdown-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 30px; }
+  .diff-card { border-radius: 12px; padding: 18px 20px; border: 2px solid; display: flex; flex-direction: column; gap: 8px; }
   .diff-card-header { display: flex; align-items: center; justify-content: space-between; }
   .diff-card-label { font-size: 14px; font-weight: 800; }
   .diff-card-score { font-size: 22px; font-weight: 900; }
@@ -311,9 +303,19 @@
       </ul>
     </div>
 
-    <button class="btn btn-primary" id="btn-start" style="font-size:18px;padding:16px 48px;">
-      🚀 Generate &amp; Start Exam
-    </button>
+    <div style="margin-bottom: 24px; text-align: left; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto;">
+      <label for="user-name" style="font-size: 14px; font-weight: 700; color: var(--ptc-blue); display: block; margin-bottom: 8px;">Examinee Name:</label>
+      <input type="text" id="user-name" placeholder="Enter your full name" required style="width: 100%; padding: 12px 16px; font-size: 16px; border-radius: 8px; border: 2px solid var(--ptc-mid); outline: none;">
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+      <button class="btn btn-primary" id="btn-start" style="font-size:18px;padding:16px 48px;">
+        🚀 Generate & Start Exam
+      </button>
+      <button class="btn btn-secondary" id="btn-admin" style="font-size:14px; padding:10px 24px; border:none; background:transparent; text-decoration:underline; cursor: pointer;">
+        Admin Console Login
+      </button>
+    </div>
   </div>
 </div>
 
@@ -422,6 +424,34 @@
 </div>
 
 <script>
+// ── FIREBASE INITIALIZATION ────────────────────────────────────────────────────
+// ⚠️ REPLACE THIS OBJECT WITH YOUR FIREBASE CONFIG KEYS
+const firebaseConfig = {
+  apiKey: "AIzaSyD3DQn88St_z9wuYVwiwBjxC3Y0K3LSVX8",
+  authDomain: "windchill-mock-exams.firebaseapp.com",
+  projectId: "windchill-mock-exams",
+  storageBucket: "windchill-mock-exams.firebasestorage.app",
+  messagingSenderId: "971978492228",
+  appId: "1:971978492228:web:a9b27813cc55dec40def11",
+  measurementId: "G-TNWL8F6TYM"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ── ADMIN LOGIN LOGIC ──────────────────────────────────────────────────────────
+document.getElementById('btn-admin').addEventListener('click', () => {
+  const pwd = prompt("🔒 Enter Admin Password:");
+  if (pwd === "PlmAdmin2026!") {
+    const projectId = firebaseConfig.projectId;
+    window.open(`https://console.firebase.google.com/project/${projectId}/firestore/data/~2Fexam_results`, "_blank");
+  } else if (pwd !== null) {
+    alert("❌ Incorrect Password.");
+  }
+});
+
+
 // ── DIFFICULTY CONSTANTS ───────────────────────────────────────────────────────
 const DIFF_LABELS  = { easy: '🟢 Easy', medium: '🟡 Medium', hard: '🔴 Hard', unrated: '⚪ Unrated' };
 const DIFF_COLORS  = { easy: '#2D7D46', medium: '#D4820A', hard: '#C0392B', unrated: '#718096' };
@@ -486,21 +516,18 @@ async function fetchAllQuestions() {
 function buildExamSubset(pool, targetCount) {
   let pEasy, pMed, pHard;
   
-  // Set target difficulties and timers based on selection
   if      (targetCount === 25)  { pEasy=0.10; pMed=0.20; pHard=0.70; maxSeconds=15*60; }
   else if (targetCount === 50)  { pEasy=0.20; pMed=0.40; pHard=0.40; maxSeconds=35*60; }
   else if (targetCount === 75)  { pEasy=0.25; pMed=0.45; pHard=0.30; maxSeconds=60*60; }
   else                          { pEasy=0.30; pMed=0.35; pHard=0.35; maxSeconds=75*60; }
 
-  // Calculate strict quotas
   let easyNeeded = Math.round(targetCount * pEasy);
   let medNeeded  = Math.round(targetCount * pMed);
   let hardNeeded = Math.round(targetCount * pHard);
-  hardNeeded += targetCount - (easyNeeded + medNeeded + hardNeeded); // Fix rounding
+  hardNeeded += targetCount - (easyNeeded + medNeeded + hardNeeded); 
   
-  const multiNeeded = Math.round(targetCount * 0.10); // Exactly 10% multi-answer
+  const multiNeeded = Math.round(targetCount * 0.10); 
 
-  // Separate pools by type and difficulty
   let multiPool = [], singleEasy = [], singleMed = [], singleHard = [], singleUnrated = [];
 
   pool.forEach(q => {
@@ -517,17 +544,14 @@ function buildExamSubset(pool, targetCount) {
     }
   });
 
-  // Shuffle all pools
   const shuffle = arr => arr.sort(() => 0.5 - Math.random());
   shuffle(multiPool); shuffle(singleEasy); shuffle(singleMed); shuffle(singleHard); shuffle(singleUnrated);
 
   let finalQs = [];
 
-  // 1. Draw Multi-Answer Questions first
   let pulledMulti = multiPool.splice(0, multiNeeded);
   finalQs.push(...pulledMulti);
 
-  // 2. Adjust remaining difficulty targets based on the multi-questions drawn
   pulledMulti.forEach(q => {
     const d = normDiff(q.difficulty);
     if (d === 'easy') easyNeeded--;
@@ -539,19 +563,17 @@ function buildExamSubset(pool, targetCount) {
   medNeeded = Math.max(0, medNeeded);
   hardNeeded = Math.max(0, hardNeeded);
 
-  // 3. Draw Single-Answer Questions to fill the remaining difficulty buckets
   function drawSingle(source, count) {
     if (count <= 0) return 0;
     const pulled = source.splice(0, count);
     finalQs.push(...pulled);
-    return count - pulled.length; // Returns deficit if pool ran out
+    return count - pulled.length; 
   }
 
   let eDef = drawSingle(singleEasy, easyNeeded);
   let mDef = drawSingle(singleMed,  medNeeded);
   let hDef = drawSingle(singleHard, hardNeeded);
 
-  // 4. Fallback Safety: Fill any deficits to guarantee exact exam length
   if (finalQs.length < targetCount) {
     let needed = targetCount - finalQs.length;
     let uDef = drawSingle(singleUnrated, needed);
@@ -562,13 +584,18 @@ function buildExamSubset(pool, targetCount) {
     }
   }
 
-  // Final shuffle so multiple-choice and difficulties are mixed randomly
   shuffle(finalQs);
   return finalQs.slice(0, targetCount);
 }
 
 // ── START ──────────────────────────────────────────────────────────────────────
 document.getElementById('btn-start').addEventListener('click', async () => {
+  const userNameInput = document.getElementById('user-name').value.trim();
+  if (!userNameInput) {
+    alert("⚠️ Please enter your full name before starting the exam.");
+    return;
+  }
+
   const btn = document.getElementById('btn-start');
   btn.textContent = 'Compiling Exam...';
   btn.disabled = true;
@@ -666,9 +693,8 @@ function renderQuestion() {
 
   const isFlagged = !!flagged[currentIdx];
   const userAns   = answers[currentIdx];
-  const letters   = ['A','B','C','D','E','F']; // Extended in case of >4 options for multi
+  const letters   = ['A','B','C','D','E','F']; 
   
-  // Setup Multiple-Choice Check
   const isMulti = Array.isArray(q.correctAnswer);
   const multiBadge = isMulti 
     ? `<span class="diff-badge" style="background:#EBF0F8; color:var(--ptc-blue); border-color:var(--ptc-blue);">Select ${q.correctAnswer.length}</span>` 
@@ -780,7 +806,6 @@ function finishExam() {
     } else {
       let isCorrect = false;
       if (isMulti) {
-        // Strict grading: must select exact right options
         isCorrect = (uAns.length === q.correctAnswer.length) && 
                     q.correctAnswer.every(val => uAns.includes(val));
       } else {
@@ -816,7 +841,7 @@ function finishExam() {
   document.getElementById('stat-skipped').textContent    = skipped;
   document.getElementById('stat-time').textContent       = `${Math.floor(timeTaken/60)}m ${timeTaken%60}s`;
 
-  // ── Topic breakdown ──────────────────────────────────────────────────────────
+  // Topic breakdown
   let bestTopic  = { name: 'N/A', pct: -1 };
   let worstTopic = { name: 'N/A', pct: 101 };
 
@@ -838,7 +863,7 @@ function finishExam() {
   document.getElementById('insight-action').textContent    =
     `Review course material regarding ${worstTopic.name} before attempting the exam again.`;
 
-  // ── Difficulty breakdown ─────────────────────────────────────────────────────
+  // Difficulty breakdown
   document.getElementById('difficulty-breakdown').innerHTML =
     Object.entries(diffStats)
       .filter(([, s]) => s.total > 0)
@@ -861,7 +886,26 @@ function finishExam() {
         </div>`;
       }).join('');
 
-  // ── Question review ──────────────────────────────────────────────────────────
+  // ── FIREBASE DB SAVE ────────────────────────────────────────────────────────
+  const examineeName = document.getElementById('user-name').value.trim() || "Anonymous";
+  const reportData = {
+    examineeName: examineeName,
+    scorePercentage: pct,
+    questionsAnsweredCorrectly: correct,
+    totalQuestions: total,
+    passed: pass,
+    strongestDomain: bestTopic.name,
+    weakestDomain: worstTopic.name,
+    timeTakenSeconds: timeTaken,
+    examDate: new Date().toISOString()
+  };
+
+  db.collection("exam_results").add(reportData)
+    .then(() => console.log("Securely saved to database."))
+    .catch((error) => console.error("Database save failed:", error));
+  // ────────────────────────────────────────────────────────────────────────────
+
+  // Question review 
   const letters = ['A','B','C','D','E','F'];
   document.getElementById('review-list').innerHTML =
     questions.map((q, i) => {
