@@ -264,7 +264,6 @@
   </div>
 </header>
 
-<!-- ── WELCOME SCREEN ── -->
 <div class="screen active" id="screen-welcome">
   <div class="welcome-card">
     <div class="welcome-badge">Implementation Practitioner</div>
@@ -318,7 +317,6 @@
   </div>
 </div>
 
-<!-- ── QUIZ SCREEN ── -->
 <div class="screen" id="screen-quiz">
   <div style="margin-bottom:12px;">
     <div class="progress-bar-wrap">
@@ -340,7 +338,6 @@
   </div>
 </div>
 
-<!-- ── RESULTS SCREEN ── -->
 <div class="screen" id="screen-results">
   <div class="results-card">
     <h2>🎓 Exam Analytics Report</h2>
@@ -448,7 +445,7 @@ function normDiff(raw) {
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
 let questions  = [];
-let answers    = {};
+let answers    = {}; 
 let flagged    = {};
 let currentIdx = 0;
 let timerInterval = null;
@@ -488,51 +485,84 @@ async function fetchAllQuestions() {
 // ── BUILD SUBSET ───────────────────────────────────────────────────────────────
 function buildExamSubset(pool, targetCount) {
   let pEasy, pMed, pHard;
+  
+  // Set target difficulties and timers based on selection
   if      (targetCount === 25)  { pEasy=0.10; pMed=0.20; pHard=0.70; maxSeconds=15*60; }
   else if (targetCount === 50)  { pEasy=0.20; pMed=0.40; pHard=0.40; maxSeconds=35*60; }
   else if (targetCount === 75)  { pEasy=0.25; pMed=0.45; pHard=0.30; maxSeconds=60*60; }
   else                          { pEasy=0.30; pMed=0.35; pHard=0.35; maxSeconds=75*60; }
 
+  // Calculate strict quotas
   let easyNeeded = Math.round(targetCount * pEasy);
   let medNeeded  = Math.round(targetCount * pMed);
   let hardNeeded = Math.round(targetCount * pHard);
-  hardNeeded += targetCount - (easyNeeded + medNeeded + hardNeeded); // fix rounding
+  hardNeeded += targetCount - (easyNeeded + medNeeded + hardNeeded); // Fix rounding
+  
+  const multiNeeded = Math.round(targetCount * 0.10); // Exactly 10% multi-answer
 
-  let easy = [], med = [], hard = [], unrated = [];
+  // Separate pools by type and difficulty
+  let multiPool = [], singleEasy = [], singleMed = [], singleHard = [], singleUnrated = [];
 
   pool.forEach(q => {
+    const isMulti = Array.isArray(q.correctAnswer);
     const d = normDiff(q.difficulty);
-    if      (d === 'easy')    easy.push(q);
-    else if (d === 'medium')  med.push(q);
-    else if (d === 'hard')    hard.push(q);
-    else                      unrated.push(q);
+
+    if (isMulti) {
+      multiPool.push(q);
+    } else {
+      if      (d === 'easy')   singleEasy.push(q);
+      else if (d === 'medium') singleMed.push(q);
+      else if (d === 'hard')   singleHard.push(q);
+      else                     singleUnrated.push(q);
+    }
   });
 
+  // Shuffle all pools
   const shuffle = arr => arr.sort(() => 0.5 - Math.random());
-  shuffle(easy); shuffle(med); shuffle(hard); shuffle(unrated);
+  shuffle(multiPool); shuffle(singleEasy); shuffle(singleMed); shuffle(singleHard); shuffle(singleUnrated);
 
   let finalQs = [];
 
-  function draw(source, count) {
+  // 1. Draw Multi-Answer Questions first
+  let pulledMulti = multiPool.splice(0, multiNeeded);
+  finalQs.push(...pulledMulti);
+
+  // 2. Adjust remaining difficulty targets based on the multi-questions drawn
+  pulledMulti.forEach(q => {
+    const d = normDiff(q.difficulty);
+    if (d === 'easy') easyNeeded--;
+    else if (d === 'medium') medNeeded--;
+    else if (d === 'hard') hardNeeded--;
+  });
+
+  easyNeeded = Math.max(0, easyNeeded);
+  medNeeded = Math.max(0, medNeeded);
+  hardNeeded = Math.max(0, hardNeeded);
+
+  // 3. Draw Single-Answer Questions to fill the remaining difficulty buckets
+  function drawSingle(source, count) {
+    if (count <= 0) return 0;
     const pulled = source.splice(0, count);
     finalQs.push(...pulled);
-    return count - pulled.length; // deficit if not enough
+    return count - pulled.length; // Returns deficit if pool ran out
   }
 
-  let eDef = draw(easy, easyNeeded);
-  let mDef = draw(med,  medNeeded);
-  let hDef = draw(hard, hardNeeded);
-  let totalDeficit = eDef + mDef + hDef;
+  let eDef = drawSingle(singleEasy, easyNeeded);
+  let mDef = drawSingle(singleMed,  medNeeded);
+  let hDef = drawSingle(singleHard, hardNeeded);
 
-  if (totalDeficit > 0) {
-    let uDef = draw(unrated, totalDeficit);
+  // 4. Fallback Safety: Fill any deficits to guarantee exact exam length
+  if (finalQs.length < targetCount) {
+    let needed = targetCount - finalQs.length;
+    let uDef = drawSingle(singleUnrated, needed);
     if (uDef > 0) {
-      let rDef = draw(easy, uDef);
-      rDef = draw(med,  rDef);
-      draw(hard, rDef);
+       let rDef = drawSingle(singleEasy, uDef);
+       rDef = drawSingle(singleMed, rDef);
+       drawSingle(singleHard, rDef);
     }
   }
 
+  // Final shuffle so multiple-choice and difficulties are mixed randomly
   shuffle(finalQs);
   return finalQs.slice(0, targetCount);
 }
@@ -615,9 +645,13 @@ function updateNavGrid() {
     const dot = document.getElementById(`nav-${i}`);
     if (!dot) return;
     dot.className = 'nav-dot';
-    if (i === currentIdx)           dot.classList.add('active');
-    else if (answers[i] !== undefined) dot.classList.add('answered');
-    if (flagged[i])                 dot.classList.add('flagged-dot');
+    if (i === currentIdx) {
+        dot.classList.add('active');
+    } else {
+        const hasAnswered = Array.isArray(answers[i]) ? answers[i].length > 0 : answers[i] !== undefined;
+        if (hasAnswered) dot.classList.add('answered');
+    }
+    if (flagged[i]) dot.classList.add('flagged-dot');
   });
 }
 
@@ -632,14 +666,18 @@ function renderQuestion() {
 
   const isFlagged = !!flagged[currentIdx];
   const userAns   = answers[currentIdx];
-  const letters   = ['A','B','C','D'];
-
-  // ── Difficulty badge is intentionally HIDDEN during the exam ──
-  const diffBadge = '';
+  const letters   = ['A','B','C','D','E','F']; // Extended in case of >4 options for multi
+  
+  // Setup Multiple-Choice Check
+  const isMulti = Array.isArray(q.correctAnswer);
+  const multiBadge = isMulti 
+    ? `<span class="diff-badge" style="background:#EBF0F8; color:var(--ptc-blue); border-color:var(--ptc-blue);">Select ${q.correctAnswer.length}</span>` 
+    : '';
 
   let optionsHTML = q.options.map((opt, i) => {
     let cls = 'option-btn';
-    if (userAns === i) cls += ' selected';
+    let isSelected = isMulti ? (userAns && userAns.includes(i)) : (userAns === i);
+    if (isSelected) cls += ' selected';
     return `<button class="${cls}" data-idx="${i}">
       <span class="option-letter">${letters[i]}</span>
       <span>${opt}</span>
@@ -651,7 +689,7 @@ function renderQuestion() {
     <div class="q-meta">
       <span class="q-num-badge">Q ${currentIdx+1} of ${total}</span>
       <span class="topic-badge">${q.topic}</span>
-      ${diffBadge}
+      ${multiBadge}
       ${isFlagged ? '<span class="flagged-badge">🚩 Flagged</span>' : ''}
     </div>
     <div class="question-text">${q.question}</div>
@@ -672,8 +710,21 @@ function renderQuestion() {
   card.querySelectorAll('.option-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const chosen = parseInt(btn.dataset.idx);
-      if (answers[currentIdx] === chosen) delete answers[currentIdx];
-      else answers[currentIdx] = chosen;
+      
+      if (isMulti) {
+        if (!answers[currentIdx]) answers[currentIdx] = [];
+        const pos = answers[currentIdx].indexOf(chosen);
+        if (pos > -1) {
+          answers[currentIdx].splice(pos, 1);
+          if (answers[currentIdx].length === 0) delete answers[currentIdx];
+        } else {
+          answers[currentIdx].push(chosen);
+        }
+      } else {
+        if (answers[currentIdx] === chosen) delete answers[currentIdx];
+        else answers[currentIdx] = chosen;
+      }
+      
       renderQuestion();
     });
   });
@@ -721,14 +772,28 @@ function finishExam() {
     const dKey = normDiff(q.difficulty);
     diffStats[dKey].total++;
 
-    if (answers[i] === undefined) {
+    const isMulti = Array.isArray(q.correctAnswer);
+    const uAns = answers[i];
+
+    if (uAns === undefined || (isMulti && uAns.length === 0)) {
       skipped++;
-    } else if (answers[i] === q.correctAnswer) {
-      correct++;
-      topicStats[q.topic].correct++;
-      diffStats[dKey].correct++;
     } else {
-      wrong++;
+      let isCorrect = false;
+      if (isMulti) {
+        // Strict grading: must select exact right options
+        isCorrect = (uAns.length === q.correctAnswer.length) && 
+                    q.correctAnswer.every(val => uAns.includes(val));
+      } else {
+        isCorrect = (uAns === q.correctAnswer);
+      }
+
+      if (isCorrect) {
+        correct++;
+        topicStats[q.topic].correct++;
+        diffStats[dKey].correct++;
+      } else {
+        wrong++;
+      }
     }
   });
 
@@ -797,12 +862,23 @@ function finishExam() {
       }).join('');
 
   // ── Question review ──────────────────────────────────────────────────────────
-  const letters = ['A','B','C','D'];
+  const letters = ['A','B','C','D','E','F'];
   document.getElementById('review-list').innerHTML =
     questions.map((q, i) => {
-      const userAns  = answers[i];
-      const isCorrect = userAns === q.correctAnswer;
-      const isSkipped = userAns === undefined;
+      const isMulti   = Array.isArray(q.correctAnswer);
+      const userAns   = answers[i];
+      const isSkipped = userAns === undefined || (isMulti && userAns.length === 0);
+      let isCorrect   = false;
+
+      if (!isSkipped) {
+        if (isMulti) {
+          isCorrect = (userAns.length === q.correctAnswer.length) && 
+                      q.correctAnswer.every(val => userAns.includes(val));
+        } else {
+          isCorrect = (userAns === q.correctAnswer);
+        }
+      }
+
       const icon      = isCorrect ? '✅' : (isSkipped ? '⏭️' : '❌');
 
       const dKey      = normDiff(q.difficulty);
@@ -811,15 +887,24 @@ function finishExam() {
       const dBg       = DIFF_BG[dKey];
       const dBorder   = DIFF_BORDER[dKey];
 
-      // Difficulty badge shown in review only
       const diffBadgeHTML = dKey !== 'unrated'
         ? `<span class="diff-badge" style="background:${dBg};color:${dColor};border-color:${dBorder}40">${dLabel}</span>`
+        : '';
+        
+      const multiBadgeHTML = isMulti 
+        ? `<span class="diff-badge" style="background:#EBF0F8; color:var(--ptc-blue); border-color:var(--ptc-blue)40">Select ${q.correctAnswer.length}</span>` 
         : '';
 
       const optionsHTML = q.options.map((opt, j) => {
         let cls = 'review-option';
-        if (j === q.correctAnswer)           cls += ' r-correct';
-        else if (j === userAns && !isCorrect) cls += ' r-wrong';
+        const isOptCorrect = isMulti ? q.correctAnswer.includes(j) : (q.correctAnswer === j);
+        const didSelect    = isMulti ? (userAns && userAns.includes(j)) : (userAns === j);
+
+        if (isOptCorrect) {
+          cls += ' r-correct';
+        } else if (didSelect && !isCorrect) {
+          cls += ' r-wrong';
+        }
         return `<div class="${cls}"><strong>${letters[j]}.</strong> ${opt}</div>`;
       }).join('');
 
@@ -830,6 +915,7 @@ function finishExam() {
             <span class="review-q-text"><strong>Q${i+1}.</strong> ${q.question}</span>
           </div>
           <div class="review-header-right">
+            ${multiBadgeHTML}
             ${diffBadgeHTML}
             <span class="expand-icon">▼</span>
           </div>
