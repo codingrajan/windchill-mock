@@ -440,15 +440,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ── ADMIN LOGIN LOGIC ──────────────────────────────────────────────────────────
+// ── ADMIN LOGIN REDIRECT ──────────────────────────────────────────────────────────
 document.getElementById('btn-admin').addEventListener('click', () => {
-  const pwd = prompt("🔒 Enter Admin Password:");
-  if (pwd === "PlmAdmin2026!") {
-    const projectId = firebaseConfig.projectId;
-    window.open(`https://console.firebase.google.com/project/${projectId}/firestore/data/~2Fexam_results`, "_blank");
-  } else if (pwd !== null) {
-    alert("❌ Incorrect Password.");
-  }
+  // Opens your hidden report portal in a new tab
+  window.open("admin_report.html", "_blank");
 });
 
 

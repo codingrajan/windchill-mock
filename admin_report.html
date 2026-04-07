@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Admin Report | Windchill</title>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #F0F4F8; color: #1A2B3C; margin: 0; padding: 40px; display: flex; flex-direction: column; align-items: center; }
+  .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,56,101,0.1); width: 100%; max-width: 1000px; }
+  h1 { color: #003865; margin-top: 0; border-bottom: 2px solid #D6E4F0; padding-bottom: 10px; }
+  .btn { background: #003865; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+  .btn:hover { background: #002A4E; }
+  .btn-export { background: #2D7D46; margin-right: 10px; }
+  input { padding: 10px; border: 1px solid #CBD5E0; border-radius: 6px; width: 100%; margin-bottom: 15px; font-size: 16px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+  th { background: #D6E4F0; color: #003865; padding: 12px; text-align: left; }
+  td { padding: 12px; border-bottom: 1px solid #CBD5E0; }
+  
+  #login-screen { max-width: 400px; margin: 50px auto; text-align: center; }
+  #report-screen { display: none; }
+</style>
+</head>
+<body>
+
+<div class="card" id="login-screen">
+  <h1>Admin Login</h1>
+  <p style="color: #4A5568; margin-bottom: 24px;">Please authenticate to access the secure database.</p>
+  <input type="email" id="admin-email" placeholder="Admin Email">
+  <input type="password" id="admin-pwd" placeholder="Password">
+  <button class="btn" id="btn-login" style="width: 100%; padding: 14px; font-size: 16px;">Access Secure Report</button>
+  <div id="login-error" style="color: #C0392B; margin-top: 15px; font-weight: bold; display: none;"></div>
+</div>
+
+<div class="card" id="report-screen">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>📊 Exam Analytics Report</h1>
+    <div>
+      <button class="btn btn-export" id="btn-export">📥 Export to Excel (CSV)</button>
+      <button class="btn" id="btn-logout" style="background: #C0392B;">Logout</button>
+    </div>
+  </div>
+  
+  <div style="overflow-x: auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Examinee Name</th>
+          <th>Score</th>
+          <th>Status</th>
+          <th>Time Taken</th>
+          <th>Weakest Domain</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// ⚠️ REPLACE THIS OBJECT WITH YOUR FIREBASE CONFIG KEYS
+const firebaseConfig = {
+  apiKey: "AIzaSyD3DQn88St_z9wuYVwiwBjxC3Y0K3LSVX8",
+  authDomain: "windchill-mock-exams.firebaseapp.com",
+  projectId: "windchill-mock-exams",
+  storageBucket: "windchill-mock-exams.firebasestorage.app",
+  messagingSenderId: "971978492228",
+  appId: "1:971978492228:web:a9b27813cc55dec40def11",
+  measurementId: "G-TNWL8F6TYM"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+let reportDataCache = [];
+
+// Handle Login
+document.getElementById('btn-login').addEventListener('click', () => {
+  const email = document.getElementById('admin-email').value;
+  const pwd = document.getElementById('admin-pwd').value;
+  const btn = document.getElementById('btn-login');
+  const errorMsg = document.getElementById('login-error');
+  
+  btn.textContent = "Authenticating...";
+  errorMsg.style.display = 'none';
+
+  auth.signInWithEmailAndPassword(email, pwd)
+    .then(() => {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('report-screen').style.display = 'block';
+      loadReportData();
+    })
+    .catch((error) => {
+      btn.textContent = "Access Secure Report";
+      errorMsg.textContent = "❌ " + error.message;
+      errorMsg.style.display = 'block';
+    });
+});
+
+// Fetch Secure Data
+async function loadReportData() {
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Fetching secure data from Firebase...</td></tr>';
+
+  try {
+    const snapshot = await db.collection("exam_results").orderBy("examDate", "desc").get();
+    tbody.innerHTML = '';
+    reportDataCache = [];
+
+    if (snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No exams have been completed yet.</td></tr>';
+      return;
+    }
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      reportDataCache.push(data);
+      
+      const date = new Date(data.examDate);
+      const dateStr = date.toLocaleDateString() + " " + date.toLocaleTimeString();
+      const statusColor = data.passed ? "#2D7D46" : "#C0392B";
+      const statusText = data.passed ? "PASSED" : "FAILED";
+      const timeStr = `${Math.floor(data.timeTakenSeconds / 60)}m ${data.timeTakenSeconds % 60}s`;
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${dateStr}</td>
+          <td style="font-weight: 600;">${data.examineeName}</td>
+          <td>${data.scorePercentage}% (${data.questionsAnsweredCorrectly}/${data.totalQuestions})</td>
+          <td style="color: ${statusColor}; font-weight: bold;">${statusText}</td>
+          <td>${timeStr}</td>
+          <td style="font-size: 12px;">${data.weakestDomain}</td>
+        </tr>
+      `;
+    });
+  } catch (error) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: red;">Error: ${error.message}</td></tr>`;
+  }
+}
+
+// Handle Export to CSV
+document.getElementById('btn-export').addEventListener('click', () => {
+  if (reportDataCache.length === 0) return alert("No data to export.");
+  
+  let csvContent = "Date,Name,Score (%),Correct,Total Questions,Status,Time Taken (s),Strongest Domain,Weakest Domain\\n";
+  
+  reportDataCache.forEach(row => {
+    const date = new Date(row.examDate).toLocaleString().replace(/,/g, '');
+    const name = `"${row.examineeName}"`;
+    const status = row.passed ? "PASSED" : "FAILED";
+    const strong = `"${row.strongestDomain}"`;
+    const weak = `"${row.weakestDomain}"`;
+    csvContent += `${date},${name},${row.scorePercentage},${row.questionsAnsweredCorrectly},${row.totalQuestions},${status},${row.timeTakenSeconds},${strong},${weak}\\n`;
+  });
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Windchill_Exam_Results.csv";
+  link.click();
+});
+
+// Handle Logout
+document.getElementById('btn-logout').addEventListener('click', () => {
+  auth.signOut().then(() => {
+    document.getElementById('report-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'block';
+    document.getElementById('admin-pwd').value = '';
+    document.getElementById('admin-email').value = '';
+  });
+});
+</script>
+</body>
+</html>
