@@ -89,7 +89,7 @@
   .btn-secondary { background: white; color: var(--ptc-blue); border: 2px solid var(--border); }
   .btn-secondary:hover { border-color: var(--ptc-blue); background: var(--ptc-light); }
   .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-  
+
   .btn-header-submit { padding: 8px 20px; font-size: 14px; background: var(--danger); color: white; border-radius: 20px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(192,57,43,0.4); transition: 0.2s; }
   .btn-header-submit:hover { background: #A93226; transform: translateY(-1px); }
 
@@ -102,7 +102,7 @@
   .q-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
   .q-num-badge { background: var(--ptc-blue); color: white; font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
   .topic-badge { background: var(--ptc-light); color: var(--ptc-blue); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--ptc-mid); }
-  .diff-badge { background: #F1F5F9; color: var(--text-mid); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); text-transform: capitalize; }
+  .diff-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; border: 1.5px solid; }
   .flagged-badge { background: #FFF3CD; color: #856404; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid #FFDA6A; }
 
   .question-text { font-size: 18px; font-weight: 600; color: var(--text-dark); line-height: 1.6; margin-bottom: 28px; }
@@ -169,7 +169,7 @@
 
   .insights-panel { background: white; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; }
   .insight-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
-  .insight-row:last-child { border-bottom: none; background: #F8FAFC; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;}
+  .insight-row:last-child { border-bottom: none; background: #F8FAFC; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; }
   .i-icon { font-size: 24px; }
   .i-content h4 { font-size: 12px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 4px; letter-spacing: 0.5px; }
   .i-content p { font-size: 16px; font-weight: 700; color: var(--ptc-blue); }
@@ -189,19 +189,44 @@
   .t-bar-wrap { width: 120px; background: var(--ptc-light); border-radius: 4px; height: 8px; overflow: hidden; }
   .t-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
+  /* ── DIFFICULTY BREAKDOWN ── */
+  .diff-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+  .diff-card {
+    border-radius: 12px;
+    padding: 18px 20px;
+    border: 2px solid;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .diff-card-header { display: flex; align-items: center; justify-content: space-between; }
+  .diff-card-label { font-size: 14px; font-weight: 800; }
+  .diff-card-score { font-size: 22px; font-weight: 900; }
+  .diff-card-fraction { font-size: 12px; opacity: 0.75; font-weight: 600; }
+  .diff-card-bar-wrap { background: rgba(255,255,255,0.5); border-radius: 4px; height: 6px; overflow: hidden; }
+  .diff-card-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .diff-card-mastery { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.85; }
+
+  /* ── REVIEW SECTION ── */
   .review-section { margin-top: 36px; }
   .review-title { font-size: 16px; font-weight: 700; color: var(--ptc-blue); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--ptc-mid); }
   .review-item { border: 1.5px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
-  .review-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; background: var(--ptc-light); transition: background 0.15s; }
+  .review-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; background: var(--ptc-light); transition: background 0.15s; gap: 12px; }
   .review-header:hover { background: var(--ptc-mid); }
-  .review-header .rh-left { display: flex; align-items: center; gap: 10px; }
-  .status-icon { font-size: 18px; }
+  .review-header .rh-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .status-icon { font-size: 18px; flex-shrink: 0; }
   .review-q-text { font-size: 14px; font-weight: 600; color: var(--text-dark); flex: 1; line-height: 1.4; }
+  .review-header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .expand-icon { font-size: 18px; color: var(--text-mid); transition: transform 0.2s; }
   .review-item.open .expand-icon { transform: rotate(180deg); }
   .review-body { display: none; padding: 18px; border-top: 1px solid var(--border); }
   .review-item.open .review-body { display: block; }
-  
+
   .review-option { padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 14px; border: 1.5px solid transparent; background: #FAFAFA; border-color: var(--border); }
   .review-option.r-correct { background: #EBF7EF; border-color: var(--success); color: #155724; font-weight: 600; }
   .review-option.r-wrong { background: #FDEEEC; border-color: var(--danger); color: #721C24; text-decoration: line-through; }
@@ -216,6 +241,7 @@
     header { flex-direction: column; gap: 14px; padding: 14px; }
     #timer { font-size: 16px; padding: 6px 14px; }
     .t-bar-wrap { display: none; }
+    .diff-breakdown-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -238,11 +264,12 @@
   </div>
 </header>
 
+<!-- ── WELCOME SCREEN ── -->
 <div class="screen active" id="screen-welcome">
   <div class="welcome-card">
     <div class="welcome-badge">Implementation Practitioner</div>
     <h1>Windchill Certification Mock Exam</h1>
-    
+
     <div class="test-config">
       <label for="q-count-selector">Select Number of Questions:</label>
       <select id="q-count-selector">
@@ -286,11 +313,12 @@
     </div>
 
     <button class="btn btn-primary" id="btn-start" style="font-size:18px;padding:16px 48px;">
-      🚀 Generate & Start Exam
+      🚀 Generate &amp; Start Exam
     </button>
   </div>
 </div>
 
+<!-- ── QUIZ SCREEN ── -->
 <div class="screen" id="screen-quiz">
   <div style="margin-bottom:12px;">
     <div class="progress-bar-wrap">
@@ -298,8 +326,7 @@
     </div>
   </div>
   <div class="quiz-layout">
-    <div class="question-card" id="question-card">
-      </div>
+    <div class="question-card" id="question-card"></div>
     <div class="nav-panel">
       <h3>Question Navigator</h3>
       <div class="nav-grid" id="nav-grid"></div>
@@ -313,6 +340,7 @@
   </div>
 </div>
 
+<!-- ── RESULTS SCREEN ── -->
 <div class="screen" id="screen-results">
   <div class="results-card">
     <h2>🎓 Exam Analytics Report</h2>
@@ -323,7 +351,8 @@
         <div class="score-ring">
           <svg width="160" height="160" viewBox="0 0 160 160">
             <circle class="score-ring-bg" cx="80" cy="80" r="68"/>
-            <circle class="score-ring-fill" id="ring-fill" cx="80" cy="80" r="68" stroke-dasharray="427.25" stroke-dashoffset="427.25" />
+            <circle class="score-ring-fill" id="ring-fill" cx="80" cy="80" r="68"
+              stroke-dasharray="427.25" stroke-dashoffset="427.25"/>
           </svg>
           <div class="score-text">
             <div class="score-pct" id="score-pct">0%</div>
@@ -380,6 +409,9 @@
     <div class="breakdown-title">📊 Sectional Scoring</div>
     <div id="topic-breakdown" style="margin-bottom: 30px;"></div>
 
+    <div class="breakdown-title">🎯 Performance by Difficulty</div>
+    <div class="diff-breakdown-grid" id="difficulty-breakdown"></div>
+
     <div class="review-section">
       <div class="review-title">📝 Detailed Question Review</div>
       <div id="review-list"></div>
@@ -393,18 +425,38 @@
 </div>
 
 <script>
+// ── DIFFICULTY CONSTANTS ───────────────────────────────────────────────────────
+const DIFF_LABELS  = { easy: '🟢 Easy', medium: '🟡 Medium', hard: '🔴 Hard', unrated: '⚪ Unrated' };
+const DIFF_COLORS  = { easy: '#2D7D46', medium: '#D4820A', hard: '#C0392B', unrated: '#718096' };
+const DIFF_BG      = { easy: '#EBF7EF', medium: '#FFF8EE', hard: '#FDEEEC', unrated: '#F1F5F9' };
+const DIFF_BORDER  = { easy: '#2D7D46', medium: '#D4820A', hard: '#C0392B', unrated: '#A0AEC0' };
+
+function diffMastery(pct) {
+  if (pct >= 90) return 'Mastered';
+  if (pct >= 75) return 'Proficient';
+  if (pct >= 55) return 'Developing';
+  return 'Needs Work';
+}
+
+function normDiff(raw) {
+  const d = (raw || '').toLowerCase().trim();
+  if (d === 'easy')   return 'easy';
+  if (d === 'medium') return 'medium';
+  if (d === 'hard')   return 'hard';
+  return 'unrated';
+}
+
 // ── STATE ──────────────────────────────────────────────────────────────────────
-let questions = [];
-let answers = {};
-let flagged = {};
+let questions  = [];
+let answers    = {};
+let flagged    = {};
 let currentIdx = 0;
 let timerInterval = null;
-let maxSeconds = 900; 
-let secondsLeft = 900; 
-let startTime = null;
-let timeTaken = 0;
+let maxSeconds    = 900;
+let secondsLeft   = 900;
+let startTime     = null;
+let timeTaken     = 0;
 
-// JSON Files to poll from
 const POOL_FILES = [
   'windchill_mock_test_1.json',
   'windchill_mock_test_2.json',
@@ -418,136 +470,118 @@ const qSelector = document.getElementById('q-count-selector');
 qSelector.addEventListener('change', (e) => {
   const v = parseInt(e.target.value);
   document.getElementById('ui-q-count').textContent = v;
-  if(v === 25) document.getElementById('ui-t-limit').textContent = '15 min';
-  if(v === 50) document.getElementById('ui-t-limit').textContent = '35 min';
-  if(v === 75) document.getElementById('ui-t-limit').textContent = '60 min';
-  if(v === 100) document.getElementById('ui-t-limit').textContent = '75 min';
+  if (v === 25)  document.getElementById('ui-t-limit').textContent = '15 min';
+  if (v === 50)  document.getElementById('ui-t-limit').textContent = '35 min';
+  if (v === 75)  document.getElementById('ui-t-limit').textContent = '60 min';
+  if (v === 100) document.getElementById('ui-t-limit').textContent = '75 min';
 });
 
-// ── INIT & FETCH ───────────────────────────────────────────────────────────────
+// ── FETCH ──────────────────────────────────────────────────────────────────────
 async function fetchAllQuestions() {
-  let allQs = [];
-  const requests = POOL_FILES.map(file => 
+  const requests = POOL_FILES.map(file =>
     fetch(file).then(res => res.ok ? res.json() : []).catch(() => [])
   );
-  
   const results = await Promise.all(requests);
-  results.forEach(arr => { allQs = allQs.concat(arr); });
-  return allQs;
+  return results.flat();
 }
 
+// ── BUILD SUBSET ───────────────────────────────────────────────────────────────
 function buildExamSubset(pool, targetCount) {
   let pEasy, pMed, pHard;
-  if(targetCount === 25) { pEasy=0.10; pMed=0.20; pHard=0.70; maxSeconds=15*60; }
-  else if(targetCount === 50) { pEasy=0.20; pMed=0.40; pHard=0.40; maxSeconds=35*60; }
-  else if(targetCount === 75) { pEasy=0.25; pMed=0.45; pHard=0.30; maxSeconds=60*60; }
-  else { pEasy=0.30; pMed=0.35; pHard=0.35; maxSeconds=75*60; }
+  if      (targetCount === 25)  { pEasy=0.10; pMed=0.20; pHard=0.70; maxSeconds=15*60; }
+  else if (targetCount === 50)  { pEasy=0.20; pMed=0.40; pHard=0.40; maxSeconds=35*60; }
+  else if (targetCount === 75)  { pEasy=0.25; pMed=0.45; pHard=0.30; maxSeconds=60*60; }
+  else                          { pEasy=0.30; pMed=0.35; pHard=0.35; maxSeconds=75*60; }
 
   let easyNeeded = Math.round(targetCount * pEasy);
-  let medNeeded = Math.round(targetCount * pMed);
+  let medNeeded  = Math.round(targetCount * pMed);
   let hardNeeded = Math.round(targetCount * pHard);
-  hardNeeded += (targetCount - (easyNeeded + medNeeded + hardNeeded)); // Adjust rounding
+  hardNeeded += targetCount - (easyNeeded + medNeeded + hardNeeded); // fix rounding
 
   let easy = [], med = [], hard = [], unrated = [];
-  
-  // Categorize
+
   pool.forEach(q => {
-    let d = q.difficulty ? q.difficulty.toLowerCase() : 'unrated';
-    if(d === 'easy') easy.push(q);
-    else if(d === 'medium') med.push(q);
-    else if(d === 'difficult' || d === 'hard') hard.push(q);
-    else unrated.push(q);
+    const d = normDiff(q.difficulty);
+    if      (d === 'easy')    easy.push(q);
+    else if (d === 'medium')  med.push(q);
+    else if (d === 'hard')    hard.push(q);
+    else                      unrated.push(q);
   });
 
   const shuffle = arr => arr.sort(() => 0.5 - Math.random());
   shuffle(easy); shuffle(med); shuffle(hard); shuffle(unrated);
 
   let finalQs = [];
-  
+
   function draw(source, count) {
     const pulled = source.splice(0, count);
     finalQs.push(...pulled);
-    return count - pulled.length; // Returns deficit if not enough
+    return count - pulled.length; // deficit if not enough
   }
 
   let eDef = draw(easy, easyNeeded);
-  let mDef = draw(med, medNeeded);
+  let mDef = draw(med,  medNeeded);
   let hDef = draw(hard, hardNeeded);
-
   let totalDeficit = eDef + mDef + hDef;
-  
-  // Fallback routing if JSON lacks difficulty params or doesn't have enough
+
   if (totalDeficit > 0) {
     let uDef = draw(unrated, totalDeficit);
-    if(uDef > 0) {
+    if (uDef > 0) {
       let rDef = draw(easy, uDef);
-      rDef = draw(med, rDef);
+      rDef = draw(med,  rDef);
       draw(hard, rDef);
     }
   }
 
   shuffle(finalQs);
-  return finalQs.slice(0, targetCount); // Safety slice
+  return finalQs.slice(0, targetCount);
 }
 
+// ── START ──────────────────────────────────────────────────────────────────────
 document.getElementById('btn-start').addEventListener('click', async () => {
   const btn = document.getElementById('btn-start');
-  btn.textContent = "Compiling Exam...";
+  btn.textContent = 'Compiling Exam...';
   btn.disabled = true;
 
   try {
     const rawPool = await fetchAllQuestions();
-    
-    if (rawPool.length === 0) {
-      throw new Error("No questions found. Ensure JSON files exist on server.");
-    }
+    if (rawPool.length === 0) throw new Error('No questions found. Ensure JSON files exist on server.');
 
-    const targetCount = parseInt(document.getElementById('q-count-selector').value);
-    
-    // If pool is smaller than target count, just use the pool
-    const actualCount = Math.min(rawPool.length, targetCount); 
-    
-    questions = buildExamSubset(rawPool, actualCount);
-    
-    answers = {};
-    flagged = {};
+    const targetCount  = parseInt(document.getElementById('q-count-selector').value);
+    const actualCount  = Math.min(rawPool.length, targetCount);
+    questions  = buildExamSubset(rawPool, actualCount);
+    answers    = {};
+    flagged    = {};
     currentIdx = 0;
 
     buildNavGrid();
     renderQuestion();
-    
     showScreen('screen-quiz');
     document.getElementById('header-controls').style.display = 'flex';
     startTimer();
-
   } catch (error) {
-    alert("⚠️ Could not load exam.\n\n" + error.message + "\n\nIf running locally (file:///), browser security blocks local JSON loading. Upload to GitHub Pages.");
+    alert('⚠️ Could not load exam.\n\n' + error.message +
+      '\n\nIf running locally (file:///), browser security blocks local JSON loading. Upload to GitHub Pages.');
   } finally {
-    btn.textContent = "🚀 Generate & Start Exam";
+    btn.textContent = '🚀 Generate & Start Exam';
     btn.disabled = false;
   }
 });
 
 // ── TIMER ──────────────────────────────────────────────────────────────────────
 function startTimer() {
-  secondsLeft = maxSeconds; 
-  startTime = Date.now();
+  secondsLeft = maxSeconds;
+  startTime   = Date.now();
   timerInterval = setInterval(() => {
     secondsLeft--;
     const m = Math.floor(secondsLeft / 60);
     const s = secondsLeft % 60;
-    
     document.getElementById('timer-display').textContent =
       `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-      
     const timerEl = document.getElementById('timer');
     if (secondsLeft <= 300) timerEl.classList.add('urgent');
     else timerEl.classList.remove('urgent');
-    
-    if (secondsLeft <= 0) {
-      clearInterval(timerInterval);
-      finishExam();
-    }
+    if (secondsLeft <= 0) { clearInterval(timerInterval); finishExam(); }
   }, 1000);
 }
 
@@ -570,8 +604,8 @@ function buildNavGrid() {
     const dot = document.createElement('button');
     dot.className = 'nav-dot';
     dot.textContent = i + 1;
-    dot.addEventListener('click', () => { currentIdx = i; renderQuestion(); });
     dot.id = `nav-${i}`;
+    dot.addEventListener('click', () => { currentIdx = i; renderQuestion(); });
     grid.appendChild(dot);
   });
 }
@@ -581,15 +615,15 @@ function updateNavGrid() {
     const dot = document.getElementById(`nav-${i}`);
     if (!dot) return;
     dot.className = 'nav-dot';
-    if (i === currentIdx) dot.classList.add('active');
+    if (i === currentIdx)           dot.classList.add('active');
     else if (answers[i] !== undefined) dot.classList.add('answered');
-    if (flagged[i]) dot.classList.add('flagged-dot');
+    if (flagged[i])                 dot.classList.add('flagged-dot');
   });
 }
 
 // ── RENDER QUESTION ────────────────────────────────────────────────────────────
 function renderQuestion() {
-  const q = questions[currentIdx];
+  const q     = questions[currentIdx];
   const total = questions.length;
 
   document.getElementById('header-q-counter').textContent = `Q ${currentIdx+1}/${total}`;
@@ -597,10 +631,12 @@ function renderQuestion() {
   updateNavGrid();
 
   const isFlagged = !!flagged[currentIdx];
-  const userAns = answers[currentIdx];
-  const letters = ['A','B','C','D'];
-  const diffBadge = q.difficulty ? `<span class="diff-badge">${q.difficulty}</span>` : '';
-  
+  const userAns   = answers[currentIdx];
+  const letters   = ['A','B','C','D'];
+
+  // ── Difficulty badge is intentionally HIDDEN during the exam ──
+  const diffBadge = '';
+
   let optionsHTML = q.options.map((opt, i) => {
     let cls = 'option-btn';
     if (userAns === i) cls += ' selected';
@@ -636,8 +672,8 @@ function renderQuestion() {
   card.querySelectorAll('.option-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const chosen = parseInt(btn.dataset.idx);
-      if (answers[currentIdx] === chosen) delete answers[currentIdx]; 
-      else answers[currentIdx] = chosen; 
+      if (answers[currentIdx] === chosen) delete answers[currentIdx];
+      else answers[currentIdx] = chosen;
       renderQuestion();
     });
   });
@@ -655,104 +691,155 @@ function renderQuestion() {
 
 // ── GLOBAL SUBMIT ──────────────────────────────────────────────────────────────
 document.getElementById('btn-global-submit').addEventListener('click', () => {
-  const total = questions.length;
-  const answered = Object.keys(answers).length;
+  const total     = questions.length;
+  const answered  = Object.keys(answers).length;
   const unanswered = total - answered;
-  
   let msg = `Ready to submit your exam?\n\nYou answered ${answered} out of ${total} questions.`;
   if (unanswered > 0) msg += `\n⚠️ You have ${unanswered} unanswered questions!`;
-  
   if (confirm(msg)) finishExam();
 });
 
-// ── COMPUTE RESULTS ────────────────────────────────────────────────────────────
+// ── FINISH EXAM ────────────────────────────────────────────────────────────────
 function finishExam() {
   stopTimer();
   document.getElementById('header-controls').style.display = 'none';
-  
+
   const total = questions.length;
   let correct = 0, wrong = 0, skipped = 0;
   const topicStats = {};
+  const diffStats  = {
+    easy:    { correct: 0, total: 0 },
+    medium:  { correct: 0, total: 0 },
+    hard:    { correct: 0, total: 0 },
+    unrated: { correct: 0, total: 0 }
+  };
 
   questions.forEach((q, i) => {
     if (!topicStats[q.topic]) topicStats[q.topic] = { correct: 0, total: 0 };
     topicStats[q.topic].total++;
 
-    if (answers[i] === undefined) { skipped++; }
-    else if (answers[i] === q.correctAnswer) { correct++; topicStats[q.topic].correct++; }
-    else { wrong++; }
+    const dKey = normDiff(q.difficulty);
+    diffStats[dKey].total++;
+
+    if (answers[i] === undefined) {
+      skipped++;
+    } else if (answers[i] === q.correctAnswer) {
+      correct++;
+      topicStats[q.topic].correct++;
+      diffStats[dKey].correct++;
+    } else {
+      wrong++;
+    }
   });
 
-  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const pct  = total > 0 ? Math.round((correct / total) * 100) : 0;
   const pass = pct >= 80;
 
-  const ringFill = document.getElementById('ring-fill');
-  const circumference = 427.25; 
-  const offset = circumference - (pct / 100) * circumference;
+  // Score ring
+  const ringFill     = document.getElementById('ring-fill');
+  const circumference = 427.25;
+  const offset        = circumference - (pct / 100) * circumference;
   ringFill.style.stroke = pass ? '#2D7D46' : '#C0392B';
   setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
 
-  document.getElementById('score-pct').textContent = `${pct}%`;
-  document.getElementById('score-fraction').textContent = `${correct}/${total}`;
-  document.getElementById('result-verdict').textContent = pass ? '🎉 PASSED' : '⚠️ FAILED';
-  document.getElementById('result-verdict').className = 'result-verdict ' + (pass ? 'verdict-pass' : 'verdict-fail');
-  
-  document.getElementById('stat-correct').textContent = correct;
-  document.getElementById('stat-wrong').textContent = wrong;
-  document.getElementById('stat-skipped').textContent = skipped;
-  document.getElementById('stat-time').textContent = `${Math.floor(timeTaken/60)}m ${timeTaken%60}s`;
+  document.getElementById('score-pct').textContent      = `${pct}%`;
+  document.getElementById('score-fraction').textContent  = `${correct}/${total}`;
+  document.getElementById('result-verdict').textContent  = pass ? '🎉 PASSED' : '⚠️ FAILED';
+  document.getElementById('result-verdict').className    = 'result-verdict ' + (pass ? 'verdict-pass' : 'verdict-fail');
+  document.getElementById('stat-correct').textContent    = correct;
+  document.getElementById('stat-wrong').textContent      = wrong;
+  document.getElementById('stat-skipped').textContent    = skipped;
+  document.getElementById('stat-time').textContent       = `${Math.floor(timeTaken/60)}m ${timeTaken%60}s`;
 
-  let bestTopic = { name: 'N/A', pct: -1 };
+  // ── Topic breakdown ──────────────────────────────────────────────────────────
+  let bestTopic  = { name: 'N/A', pct: -1 };
   let worstTopic = { name: 'N/A', pct: 101 };
 
-  const breakdownEl = document.getElementById('topic-breakdown');
-  breakdownEl.innerHTML = Object.entries(topicStats).map(([topic, stats]) => {
-    const tPct = stats.total > 0 ? Math.round((stats.correct/stats.total)*100) : 0;
-    
-    if (tPct > bestTopic.pct) bestTopic = { name: topic, pct: tPct };
-    if (tPct < worstTopic.pct) worstTopic = { name: topic, pct: tPct };
-
-    const color = tPct >= 80 ? '#2D7D46' : tPct >= 60 ? '#D4820A' : '#C0392B';
-    return `<div class="topic-row">
-      <span class="t-name">${topic}</span>
-      <div class="t-bar-wrap"><div class="t-bar-fill" style="width:${tPct}%;background:${color}"></div></div>
-      <span class="t-score" style="color:${color}">${stats.correct}/${stats.total} (${tPct}%)</span>
-    </div>`;
-  }).join('');
-
-  document.getElementById('insight-strongest').textContent = `${bestTopic.name} (${bestTopic.pct}%)`;
-  document.getElementById('insight-weakest').textContent = `${worstTopic.name} (${worstTopic.pct}%)`;
-  document.getElementById('insight-action').textContent = `Review course material regarding ${worstTopic.name} before attempting the exam again.`;
-
-  const reviewEl = document.getElementById('review-list');
-  const letters = ['A','B','C','D'];
-  reviewEl.innerHTML = questions.map((q, i) => {
-    const userAns = answers[i];
-    const isCorrect = userAns === q.correctAnswer;
-    const isSkipped = userAns === undefined;
-    const icon = isCorrect ? '✅' : (isSkipped ? '⏭️' : '❌');
-
-    const optionsHTML = q.options.map((opt, j) => {
-      let cls = 'review-option';
-      if (j === q.correctAnswer) cls += ' r-correct';
-      else if (j === userAns && !isCorrect) cls += ' r-wrong';
-      return `<div class="${cls}"><strong>${letters[j]}.</strong> ${opt}</div>`;
+  document.getElementById('topic-breakdown').innerHTML =
+    Object.entries(topicStats).map(([topic, stats]) => {
+      const tPct  = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+      if (tPct > bestTopic.pct)  bestTopic  = { name: topic, pct: tPct };
+      if (tPct < worstTopic.pct) worstTopic = { name: topic, pct: tPct };
+      const color = tPct >= 80 ? '#2D7D46' : tPct >= 60 ? '#D4820A' : '#C0392B';
+      return `<div class="topic-row">
+        <span class="t-name">${topic}</span>
+        <div class="t-bar-wrap"><div class="t-bar-fill" style="width:${tPct}%;background:${color}"></div></div>
+        <span class="t-score" style="color:${color}">${stats.correct}/${stats.total} (${tPct}%)</span>
+      </div>`;
     }).join('');
 
-    return `<div class="review-item" id="ritem-${i}">
-      <div class="review-header" onclick="toggleReview(${i})">
-        <div class="rh-left">
-          <span class="status-icon">${icon}</span>
-          <span class="review-q-text"><strong>Q${i+1}.</strong> ${q.question}</span>
+  document.getElementById('insight-strongest').textContent = `${bestTopic.name} (${bestTopic.pct}%)`;
+  document.getElementById('insight-weakest').textContent   = `${worstTopic.name} (${worstTopic.pct}%)`;
+  document.getElementById('insight-action').textContent    =
+    `Review course material regarding ${worstTopic.name} before attempting the exam again.`;
+
+  // ── Difficulty breakdown ─────────────────────────────────────────────────────
+  document.getElementById('difficulty-breakdown').innerHTML =
+    Object.entries(diffStats)
+      .filter(([, s]) => s.total > 0)
+      .map(([key, s]) => {
+        const p       = s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0;
+        const color   = DIFF_COLORS[key];
+        const bg      = DIFF_BG[key];
+        const border  = DIFF_BORDER[key];
+        const mastery = diffMastery(p);
+        return `<div class="diff-card" style="background:${bg};border-color:${border}">
+          <div class="diff-card-header">
+            <span class="diff-card-label" style="color:${color}">${DIFF_LABELS[key]}</span>
+            <span class="diff-card-fraction" style="color:${color}">${s.correct}/${s.total}</span>
+          </div>
+          <div class="diff-card-score" style="color:${color}">${p}%</div>
+          <div class="diff-card-bar-wrap">
+            <div class="diff-card-bar-fill" style="width:${p}%;background:${color}"></div>
+          </div>
+          <div class="diff-card-mastery" style="color:${color}">${mastery}</div>
+        </div>`;
+      }).join('');
+
+  // ── Question review ──────────────────────────────────────────────────────────
+  const letters = ['A','B','C','D'];
+  document.getElementById('review-list').innerHTML =
+    questions.map((q, i) => {
+      const userAns  = answers[i];
+      const isCorrect = userAns === q.correctAnswer;
+      const isSkipped = userAns === undefined;
+      const icon      = isCorrect ? '✅' : (isSkipped ? '⏭️' : '❌');
+
+      const dKey      = normDiff(q.difficulty);
+      const dLabel    = DIFF_LABELS[dKey];
+      const dColor    = DIFF_COLORS[dKey];
+      const dBg       = DIFF_BG[dKey];
+      const dBorder   = DIFF_BORDER[dKey];
+
+      // Difficulty badge shown in review only
+      const diffBadgeHTML = dKey !== 'unrated'
+        ? `<span class="diff-badge" style="background:${dBg};color:${dColor};border-color:${dBorder}40">${dLabel}</span>`
+        : '';
+
+      const optionsHTML = q.options.map((opt, j) => {
+        let cls = 'review-option';
+        if (j === q.correctAnswer)           cls += ' r-correct';
+        else if (j === userAns && !isCorrect) cls += ' r-wrong';
+        return `<div class="${cls}"><strong>${letters[j]}.</strong> ${opt}</div>`;
+      }).join('');
+
+      return `<div class="review-item" id="ritem-${i}">
+        <div class="review-header" onclick="toggleReview(${i})">
+          <div class="rh-left">
+            <span class="status-icon">${icon}</span>
+            <span class="review-q-text"><strong>Q${i+1}.</strong> ${q.question}</span>
+          </div>
+          <div class="review-header-right">
+            ${diffBadgeHTML}
+            <span class="expand-icon">▼</span>
+          </div>
         </div>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="review-body">
-        ${optionsHTML}
-        <div class="review-exp"><strong>📖 Explanation:</strong> ${q.explanation}</div>
-      </div>
-    </div>`;
-  }).join('');
+        <div class="review-body">
+          ${optionsHTML}
+          <div class="review-exp"><strong>📖 Explanation:</strong> ${q.explanation}</div>
+        </div>
+      </div>`;
+    }).join('');
 
   showScreen('screen-results');
 }
@@ -767,7 +854,7 @@ document.getElementById('btn-home').addEventListener('click', () => {
   showScreen('screen-welcome');
 });
 document.getElementById('btn-retake').addEventListener('click', () => {
-  document.getElementById('btn-start').click(); // Re-trigger compile and start
+  document.getElementById('btn-start').click();
 });
 </script>
 </body>
